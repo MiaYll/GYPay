@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://res.wx.qq.com/t/wx_fed/weui-source/res/2.5.5/weui.css">
+    <title>确认支付</title>
+</head>
+<body data-weui-theme="light">
+<article class="weui-article">
+    <h1 style="text-align: center;">付款信息</h1>
+</article>
+<div class="weui-form-preview">
+    <div class="weui-form-preview__hd">
+        <label class="weui-form-preview__label">付款金额</label>
+        <em class="weui-form-preview__value" th:text="${order.price}"></em>
+    </div>
+    <div class="weui-form-preview__bd">
+        <p>
+            <label class="weui-form-preview__label">商品</label>
+            <span class="weui-form-preview__value" th:text="${order.itemName}"></span>
+        </p>
+        <p>
+            <label class="weui-form-preview__label">付款用户</label>
+            <span class="weui-form-preview__value" th:text="${order.username}"></span>
+        </p>
+        <p>
+            <label class="weui-form-preview__label">商品介绍</label>
+            <span class="weui-form-preview__value" th:text="${order.description}"></span>
+        </p>
+        <p>
+            <label class="weui-form-preview__label">订单号</label>
+            <span class="weui-form-preview__value" th:text="${order.orderId}"></span>
+        </p>
+    </div>
+</div>
+<a onclick="pay()" class="weui-btn_cell weui-btn_cell-default">确认付款</a>
+
+<script th:inline="javascript">
+    const openId = [[${openId}]]
+    const orderId = [[${order.orderId}]]
+    async function createOrder(openId){
+        const response = await fetch('/pay/jsapi?detailsId=1&openid=' + openId + '&orderId=' + orderId).then(response => response.json())
+        return response;
+    }
+
+
+    async function pay(){
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest', await createOrder(openId),
+            function(res){
+                if(res.err_msg == "get_brand_wcpay_request:ok" ){
+                    location.replace('/pay/wechat/success');
+                }
+            });
+    }
+    // if (typeof WeixinJSBridge == "undefined"){
+    //     if( document.addEventListener ){
+    //         document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+    //     }else if (document.attachEvent){
+    //         document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+    //         document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+    //     }
+    // }else{
+    //     onBridgeReady();
+    // }
+</script>
+
+</body>
+</html>

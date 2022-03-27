@@ -1,0 +1,3 @@
+name: GYPayBukkit
+version: '${project.version}'
+main: me.wangcai.gypaybukkit.GYPayBukkit

@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="me.wangcai.gypayserver.mapper.OrderMapper">
-
-    <select id="getUnPayOrder" resultType="Order">
-        SELECT * FROM payorder WHERE order_id NOT IN (SELECT order_id FROM payrecord) and create_time >= DATE_SUB(curdate(), INTERVAL 1 DAY) ;
+    <select id="getUnShipOrder" resultType="Order">
+        select * from payorder right join payrecord on payrecord.order_id = payorder.order_id where account_name=#{account} and is_Ship=0 and time>date_sub(curdate(),interval 1 day);;
     </select>
 </mapper>

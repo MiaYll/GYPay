@@ -27,4 +27,5 @@ public class Order {
     private double price;
     private String username;
     private PayType type;
+    private String accountName;
 }

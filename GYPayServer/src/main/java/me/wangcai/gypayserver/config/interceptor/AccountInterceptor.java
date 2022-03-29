@@ -19,7 +19,7 @@ public class AccountInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String name = request.getHeader("name");
-        String key = request.getHeader("key");
+        String key = request.getHeader("password");
         response.setHeader("Content-type","application/json;charset=utf-8");
         if(name == null || key == null){
             response.getWriter().write(JSON.toJSONString(ResponseInfo.error("用户名或密码为空!")));

@@ -9,7 +9,7 @@ import me.wangcai.gypayserver.model.param.CreateOrderParam;
 import java.util.List;
 
 public interface IOrderService extends IService<Order> {
-    ResponseInfo createOrder(CreateOrderParam createOrderParam);
+    ResponseInfo createOrder(CreateOrderParam createOrderParam,String account);
 
     Order queryOrder(String orderId);
 
@@ -17,6 +17,7 @@ public interface IOrderService extends IService<Order> {
 
     void orderFinish(String orderId, PayType type);
 
-    //获取最近一天的未支付订单
-    List<Order> getUnPayOrder();
+    List<Order> getUnShipOrder(String account);
+
+    ResponseInfo shipOrder(String orderId,String account);
 }

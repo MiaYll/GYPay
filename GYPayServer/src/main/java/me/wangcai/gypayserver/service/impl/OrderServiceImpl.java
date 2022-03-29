@@ -28,7 +28,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
     private RecordMapper recordMapper;
 
     @Override
-    public ResponseInfo createOrder(CreateOrderParam createOrderParam) {
+    public ResponseInfo createOrder(CreateOrderParam createOrderParam,String account) {
         Order order = new Order();
         order.setItemName(createOrderParam.getName());
         order.setPrice(createOrderParam.getPrice());
@@ -37,6 +37,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
         order.setType(createOrderParam.getType());
         String orderId = UUID.randomUUID().toString().replace("-", "");
         order.setOrderId(orderId);
+        order.setAccountName(account);
         order.setCreateTime(LocalDateTime.now());
         if(this.save(order)){
             return ResponseInfo.success("创建成功",order);
@@ -60,11 +61,24 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
     }
 
     public void orderFinish(String orderId, PayType type) {
-        recordMapper.insert(new Record(0,orderId,LocalDateTime.now(),type));
+        recordMapper.insert(new Record(0,orderId,LocalDateTime.now(),type,false));
     }
 
     @Override
-    public List<Order> getUnPayOrder() {
-        return orderMapper.getUnPayOrder();
+    public List<Order> getUnShipOrder(String account) {
+        return orderMapper.getUnShipOrder(account);
+    }
+
+    @Override
+    public ResponseInfo shipOrder(String orderId,String account) {
+        Record record = recordMapper.selectOne(new QueryWrapper<Record>().eq("order_id", orderId));
+        if(record == null) return  ResponseInfo.error("无此订单");
+        Order order = orderMapper.selectOne(new QueryWrapper<Order>().eq("order_id", orderId));
+        if(!order.getAccountName().equals(account)){
+            return  ResponseInfo.error("不是此账户下的订单");
+        }
+        record.setShip(true);
+        recordMapper.updateById(record);
+        return ResponseInfo.success("发货成功!",order);
     }
 }

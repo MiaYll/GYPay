@@ -1,0 +1,10 @@
+settings:
+  server: "http://server.guangyu7.cn"
+  name: "admin"
+  password: "1790175861"
+  #倍率,自动计算指令里的points变量
+  rate: 10
+commands:
+  - 'b give %player% %points%'
+  - 'say %player%成功充值了%points%点券'
+

@@ -17,4 +17,5 @@ public class Record {
     private String orderId;
     private LocalDateTime time;
     private PayType type;
+    private boolean isShip;
 }

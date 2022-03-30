@@ -20,13 +20,13 @@ public class QRCodeUtil {
     private static final String CHARSET = "utf-8";
 
     // 二维码尺寸
-    private static final int QRCODE_SIZE = 300;
+    private static final int QRCODE_SIZE = 128;
 
     // LOGO宽度
-    private static final int WIDTH = 100;
+    private static final int WIDTH = 20;
 
     // LOGO高度
-    private static final int HEIGHT = 100;
+    private static final int HEIGHT = 20;
 
     /**
      * 将前端传入的信息，编码成二维码

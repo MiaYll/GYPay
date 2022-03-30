@@ -1,3 +1,11 @@
 name: GYPayBukkit
 version: '${project.version}'
 main: me.wangcai.gypaybukkit.GYPayBukkit
+
+depend:
+  - ProtocolLib
+  - PlaceholderAPI
+
+commands:
+  gypay:
+    description: "主命令"

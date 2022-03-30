@@ -10,6 +10,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class CheckShipTask extends BukkitRunnable {
 
+    private GYPayBukkit plugin;
+
+    public CheckShipTask(GYPayBukkit plugin){
+        this.plugin = plugin;
+    }
+
     @Override
     public void run() {
         IPayService payService = GYPayBukkit.getGyPayBukkit().getPayService();
@@ -17,15 +23,25 @@ public class CheckShipTask extends BukkitRunnable {
             Player player = Bukkit.getPlayer(order.getUsername());
             if(player == null || !player.isOnline()) continue;
             if(payService.ship(order.getOrderId())){
+                player.updateInventory();
                 OrderCreateEvent event = new OrderCreateEvent(player, order, false);
                 Bukkit.getPluginManager().callEvent(event);
                 if(event.isCancelled()) continue;
-                for (String command : GYPayBukkit.getGyPayBukkit().getPluginConfig().COMMANDS) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                            command.replace("%player%",player.getName())
-                                .replace("%points%", String.valueOf(GYPayBukkit.getGyPayBukkit().getPluginConfig().SETTINGS_RATE * order.getPrice()))
-                    );
-                }
+                player.sendMessage(GYPayBukkit.getGyPayBukkit().getMessage().SUCCESS
+                        .replace("%money%",order.getPrice() + "")
+                        .replace("%points%",order.getPrice() * GYPayBukkit.getGyPayBukkit().getPluginConfig().SETTINGS_RATE + "")
+                        .replace("%order%",order.getOrderId()));
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        for (String command : GYPayBukkit.getGyPayBukkit().getPluginConfig().COMMANDS) {
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                    command.replace("%player%",player.getName())
+                                            .replace("%points%", String.valueOf(GYPayBukkit.getGyPayBukkit().getPluginConfig().SETTINGS_RATE * order.getPrice()))
+                            );
+                        }
+                    }
+                }.runTask(plugin);
             }
         }
     }

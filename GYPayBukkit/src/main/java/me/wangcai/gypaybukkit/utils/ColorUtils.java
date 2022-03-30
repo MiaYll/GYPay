@@ -92,6 +92,7 @@ public class ColorUtils {
     public static byte[] getByte(BufferedImage bufferedImage) {
         byte[] bys = new byte[16384];
         int n = 0;
+        System.out.println(bufferedImage.getWidth() + "," + bufferedImage.getHeight());
         for (int i = 0; i < 128; i++) {
             for (int j = 0; j < 128; j++) {
                 Color color = new Color(bufferedImage.getRGB(j, i));

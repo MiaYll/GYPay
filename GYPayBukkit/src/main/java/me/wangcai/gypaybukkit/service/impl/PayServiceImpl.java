@@ -2,7 +2,6 @@ package me.wangcai.gypaybukkit.service.impl;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.sun.org.apache.xpath.internal.operations.Or;
 import lombok.SneakyThrows;
 import me.wangcai.gypaybukkit.GYPayBukkit;
 import me.wangcai.gypaybukkit.model.CreateOrderParam;
@@ -50,16 +49,14 @@ public class PayServiceImpl implements IPayService {
     @Override
     public Order createOrder(CreateOrderParam createOrderParam) {
         String result = httpUtils.postJson(GYPayBukkit.getGyPayBukkit().getPluginConfig().SETTINGS_SERVER + "/order/create",gson.toJson(createOrderParam));
-        System.out.println(result);
         ResponseInfo<Order> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Order>>(){}.getType());
-        System.out.println(responseInfo);
         return responseInfo.getObj();
     }
 
     @SneakyThrows
     @Override
     public boolean openOrderQRCode(Player player, String orderId) {
-        BufferedImage qrCode = ImageIO.read(new URL(GYPayBukkit.getGyPayBukkit().getPluginConfig().SETTINGS_SERVER + "/order/qrcode/" + orderId));
+        BufferedImage qrCode = httpUtils.getImage(GYPayBukkit.getGyPayBukkit().getPluginConfig().SETTINGS_SERVER + "/order/qrcode/" + orderId);
         PacketUtils.sendMapViewPacket(player, qrCode);
         ItemStack item = ItemUtils.createItem(Material.MAP, "§a§l扫码地图", Arrays.asList("§7· 请扫描地图上的二维码"));
         ItemMeta itemMeta = item.getItemMeta();

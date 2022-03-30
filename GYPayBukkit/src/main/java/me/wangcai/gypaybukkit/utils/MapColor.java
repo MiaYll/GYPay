@@ -1,4 +1,4 @@
-package com.glazed7.glazedpay.bukkit.utils;
+package me.wangcai.gypaybukkit.utils;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MapColor {
-    public static Map<Integer, int[]> colorMap = (Map)new HashMap<>();
+    public static Map<Integer, int[]> colorMap = new HashMap<>();
 
     static {
         putMapColor(1, 127, 178, 56);

@@ -26,7 +26,9 @@ public class PacketListener extends PacketAdapter {
     public void onPacketSending(PacketEvent event) {
         Player player = event.getPlayer();
         List<UUID> cache = GYPayBukkit.getGyPayBukkit().getPayService().getPayingCache();
-        cache.remove(player.getUniqueId());
+        if(cache.remove(player.getUniqueId())){
+            event.getPlayer().sendMessage(GYPayBukkit.getGyPayBukkit().getMessage().CLOSE);
+        }
     }
 
     public void onPacketReceiving(PacketEvent event) {

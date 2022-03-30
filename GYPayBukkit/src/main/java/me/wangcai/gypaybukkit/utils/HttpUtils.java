@@ -1,6 +1,5 @@
 package me.wangcai.gypaybukkit.utils;
 
-import com.google.gson.Gson;
 import lombok.SneakyThrows;
 import me.wangcai.gypaybukkit.GYPayBukkit;
 import me.wangcai.gypaybukkit.config.Config;
@@ -8,16 +7,19 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,6 +36,7 @@ public class HttpUtils {
                 .setDefaultHeaders(Arrays.asList(new BasicHeader("name", config.SETTINGS_NAME),
                         new BasicHeader("password", config.SETTINGS_PASSWORD)
                         ))
+                .setDefaultRequestConfig(RequestConfig.custom().setConnectTimeout(3000).build())
                 .build();
     }
 
@@ -104,5 +107,18 @@ public class HttpUtils {
         return result;
     }
 
+    @SneakyThrows
+    public BufferedImage getImage(String url){
+        BufferedImage result = null;
+        HttpGet get = new HttpGet(url);
+        HttpResponse response = httpClient.execute(get);
+        if(response != null && response.getStatusLine().getStatusCode() == 200)
+        {
+            HttpEntity entity = response.getEntity();
+            InputStream inputStream =  entity.getContent();
+            result = ImageIO.read(inputStream);
+        }
+        return result;
+    }
 
 }

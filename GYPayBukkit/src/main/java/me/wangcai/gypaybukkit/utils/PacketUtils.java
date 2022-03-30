@@ -19,7 +19,7 @@ public class PacketUtils {
     @SneakyThrows
     public static void sendMapViewPacket(Player player, BufferedImage bufferedImage) {
         PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.MAP);
-        byte[] bytes = com.glazed7.glazedpay.bukkit.utils.MapColor.getByte(bufferedImage);
+        byte[] bytes = MapColor.getByte(bufferedImage);
         packet.getIntegers().write(0, Integer.valueOf(0));
         packet.getIntegers().write(1, Integer.valueOf(0));
         packet.getIntegers().write(2, Integer.valueOf(0));

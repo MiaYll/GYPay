@@ -20,4 +20,6 @@ public interface IOrderService extends IService<Order> {
     List<Order> getUnShipOrder(String account);
 
     ResponseInfo shipOrder(String orderId,String account);
+
+    ResponseInfo getShipOrder(String account,int page,int size);
 }

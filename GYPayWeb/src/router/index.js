@@ -3,6 +3,7 @@ import VueRouter from "vue-router"
 import Login from "@/pages/login/Login.vue"
 import DataChart from "@/pages/datachart/DataChart.vue"
 import OrderList from "@/pages/orderlist/OrderList.vue"
+import store from "@/store"
 
 
 Vue.use(VueRouter);
@@ -11,6 +12,7 @@ const routes = [
     {
       path: '/login',
       component: Login,
+      name: 'Login',
       meta: {
         icon: 'mdi-account-outline',
         title: '绑定密钥'
@@ -43,7 +45,16 @@ const routes = [
 
 const router = new VueRouter({
   mode: "history",
-  routes // (缩写) 相当于 routes: routes
+  routes
+})
+
+router.beforeEach((to,form,next) =>{
+  console.log(to)
+  if(to.path != '/login' && store.state.account == null){
+    next({name: "Login"})
+  }else{
+    next()
+  }
 })
   
 export default router;

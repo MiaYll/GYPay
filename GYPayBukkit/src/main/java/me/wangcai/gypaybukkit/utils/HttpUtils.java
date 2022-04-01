@@ -36,7 +36,12 @@ public class HttpUtils {
                 .setDefaultHeaders(Arrays.asList(new BasicHeader("name", config.SETTINGS_NAME),
                         new BasicHeader("password", config.SETTINGS_PASSWORD)
                         ))
-                .setDefaultRequestConfig(RequestConfig.custom().setConnectTimeout(3000).build())
+                .setDefaultRequestConfig(RequestConfig.custom().setConnectTimeout(3000)
+                        .setSocketTimeout(3000)
+                        .setConnectionRequestTimeout(3000)
+                        .build())
+                .setMaxConnTotal(20)
+                .setMaxConnPerRoute(100)
                 .build();
     }
 
@@ -57,6 +62,7 @@ public class HttpUtils {
             HttpEntity entity = response.getEntity();
             result = EntityUtils.toString(entity);
         }
+        get.releaseConnection();
         return result;
     }
 
@@ -82,6 +88,7 @@ public class HttpUtils {
             HttpEntity entity = response.getEntity();
             result = EntityUtils.toString(entity);
         }
+        post.releaseConnection();
         return result;
     }
 
@@ -104,6 +111,7 @@ public class HttpUtils {
             HttpEntity entity = response.getEntity();
             result = EntityUtils.toString(entity);
         }
+        post.releaseConnection();
         return result;
     }
 
@@ -117,7 +125,9 @@ public class HttpUtils {
             HttpEntity entity = response.getEntity();
             InputStream inputStream =  entity.getContent();
             result = ImageIO.read(inputStream);
+            inputStream.close();
         }
+        get.releaseConnection();
         return result;
     }
 

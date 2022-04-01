@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -80,5 +81,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
         record.setShip(true);
         recordMapper.updateById(record);
         return ResponseInfo.success("发货成功!",order);
+    }
+
+    @Override
+    public ResponseInfo getShipOrder(String account, int page, int size) {
+        List<Order> orderList = orderMapper.getShipOrder(account, (page - 1) * size + 1, size);
+        Map<String,Object> map = new HashMap<>();
+        map.put("list",orderList);
+        map.put("total",recordMapper.selectCount(new QueryWrapper<>()));
+        return ResponseInfo.success("获取成功",map);
     }
 }

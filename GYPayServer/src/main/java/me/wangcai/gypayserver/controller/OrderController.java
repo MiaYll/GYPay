@@ -1,10 +1,12 @@
 package me.wangcai.gypayserver.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.SneakyThrows;
 import me.wangcai.gypayserver.model.ResponseInfo;
 import me.wangcai.gypayserver.model.entity.Order;
 import me.wangcai.gypayserver.model.param.AccountInfoParam;
 import me.wangcai.gypayserver.model.param.CreateOrderParam;
+import me.wangcai.gypayserver.model.param.PageParam;
 import me.wangcai.gypayserver.service.IAccountService;
 import me.wangcai.gypayserver.service.IOrderService;
 import me.wangcai.gypayserver.utils.QRCodeUtil;
@@ -14,9 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/order")
+@CrossOrigin
 public class OrderController {
 
     @Autowired
@@ -69,5 +73,10 @@ public class OrderController {
     @PostMapping("/info")
     public ResponseInfo getAccountInfo(@RequestBody AccountInfoParam accountInfoParam, HttpServletRequest request){
         return accountService.getAccountInfo(accountInfoParam,request.getHeader("name"));
+    }
+
+    @PostMapping("/getOrderList")
+    public ResponseInfo getAccountInfo(@RequestBody PageParam pageParam, HttpServletRequest request){
+        return orderService.getShipOrder(request.getHeader("name"),pageParam.getPage(),pageParam.getSize());
     }
 }

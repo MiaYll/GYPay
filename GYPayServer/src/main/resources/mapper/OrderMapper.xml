@@ -5,4 +5,7 @@
     <select id="getUnShipOrder" resultType="Order">
         select * from payorder right join payrecord on payrecord.order_id = payorder.order_id where account_name=#{account} and is_Ship=0 and time>date_sub(curdate(),interval 1 day);;
     </select>
+    <select id="getShipOrder" resultType="Order">
+        select * from payorder right join payrecord on payrecord.order_id = payorder.order_id where account_name=#{account} limit #{start},#{end};
+    </select>
 </mapper>

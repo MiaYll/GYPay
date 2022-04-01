@@ -1,6 +1,7 @@
 <template>
   <v-data-table
     :headers="headers"
+    :items="orderData"
   >
 
   </v-data-table>
@@ -8,7 +9,7 @@
 
 <script>
 
-
+import request from "@/utils/request.js"
 
 export default {
     data(){
@@ -20,10 +21,16 @@ export default {
                 {text: "金额", value: "price"},
                 {text: "用户名", value: "username"},
                 {text: "支付方式", value: "payType"}
-            ]
-
+            ],
+            orderData: null
         }
+    },
+    async mounted(){
+      const res = await request().post("/order/getOrderList")
+      console.log(res)
     }
+
+
 }
 </script>
 

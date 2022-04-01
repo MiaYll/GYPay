@@ -18,6 +18,9 @@ public class AccountInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            return true;
+        }
         String name = request.getHeader("name");
         String key = request.getHeader("password");
         response.setHeader("Content-type","application/json;charset=utf-8");

@@ -7,7 +7,10 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state () {
         return {
-          account: null
+          account: {
+              username: null,
+              password: null
+          }
         }
     },
     mutations: {
@@ -17,5 +20,6 @@ const store = new Vuex.Store({
     },
     plugins: [createPersistedState()]
 })
+
 
 export default store;

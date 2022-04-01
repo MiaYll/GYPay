@@ -7,13 +7,12 @@ const instance = axios.create({
   });
 
 function request(){
-  if(store.state.account != null && instance.defaults.headers['name'] == undefined){
+  if(store.state.account.username != null && instance.defaults.headers['name'] == undefined){
     instance.defaults.headers['name'] = store.state.account.username;
     instance.defaults.headers['password'] = store.state.account.password;
   }
-  console.log(instance.defaults.headers)
-  console.log(instance.defaults.headers['name'])
   return instance
 }
+
 
 export default request

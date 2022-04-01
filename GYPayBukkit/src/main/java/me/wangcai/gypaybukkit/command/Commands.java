@@ -15,9 +15,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class Commands implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(!sender.hasPermission("gypay.admin")){
-            return true;
-        }
         IPayService payService = GYPayBukkit.getGyPayBukkit().getPayService();
         Config config = GYPayBukkit.getGyPayBukkit().getPluginConfig();
         if(args.length == 3 && args[0].equals("create")){

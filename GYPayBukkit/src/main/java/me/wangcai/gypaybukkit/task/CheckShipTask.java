@@ -37,7 +37,7 @@ public class CheckShipTask extends BukkitRunnable {
                         for (String command : GYPayBukkit.getGyPayBukkit().getPluginConfig().COMMANDS) {
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                                     command.replace("%player%",player.getName())
-                                            .replace("%points%", String.valueOf(GYPayBukkit.getGyPayBukkit().getPluginConfig().SETTINGS_RATE * order.getPrice()))
+                                            .replace("%points%", String.valueOf((int)(GYPayBukkit.getGyPayBukkit().getPluginConfig().SETTINGS_RATE * order.getPrice())))
                             );
                         }
                     }

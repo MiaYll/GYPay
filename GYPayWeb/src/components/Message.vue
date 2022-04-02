@@ -2,6 +2,7 @@
     <v-snackbar
       v-model="visible"
       :timeout="timeout"
+      top: true
     >
       {{ text }}
 

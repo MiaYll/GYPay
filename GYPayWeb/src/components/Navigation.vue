@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer app>
+  <v-navigation-drawer v-model="navdrawer" app>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h6">
@@ -30,16 +30,27 @@
 </template>
 
 <script>
+
 export default {
     data(){
         return {
             routes: this.$router.options.routes.filter((route) => {return route.meta.show != false || route.meta.show == undefined})
         }
     },
-    methods: {
-        setPage(route){
-            this.$router.push(route)
+    computed: {
+        navdrawer: {
+          get() {
+            return this.$store.state.navdrawer
+          },
+          set(val){
+            this.$store.state.navdrawer = val
+          }
         }
+    },
+    methods: {
+      setPage(route){
+        this.$router.push(route.path)
+      }
     }
 }
 </script>

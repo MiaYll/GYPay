@@ -10,12 +10,16 @@ const store = new Vuex.Store({
           account: {
               username: null,
               password: null
-          }
+          },
+          navdrawer: true
         }
     },
     mutations: {
         bindAccount(state,account) {
             state.account = account
+        },
+        toogle(state){
+            state.navdrawer = !state.navdrawer
         }
     },
     plugins: [createPersistedState()]

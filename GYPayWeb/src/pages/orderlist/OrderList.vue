@@ -8,7 +8,10 @@
   >
   <template v-slot:item.type="{ item }">
       <v-chip label :color="getColor(item.type)" text-color="white">{{ item.type == "WECHAT" ? "微信" : "支付宝" }}</v-chip>
-    </template>
+  </template>
+  <template v-slot:item.is_Ship="{ item }">
+      <v-chip label :color="getColor(item.is_Ship)" text-color="white">{{ item.is_Ship ? "已发货" : "未发货" }}</v-chip>
+  </template>
   </v-data-table>
 </template>
 
@@ -20,18 +23,18 @@ export default {
     data(){
         return{
             headers: [
-                {text: "订单号", value: "orderId"},
-                {text: "商品名", value: "itemName"},
-                {text: "支付时间", value: "createTime"},
+                {text: "订单号", value: "order_id"},
+                {text: "商品名", value: "item_name"},
+                {text: "支付时间", value: "time"},
                 {text: "金额", value: "price"},
                 {text: "用户名", value: "username"},
                 {text: "支付方式", value: "type"},
-                {text: "已发货", value: "isShip"}
+                {text: "已发货", value: "is_Ship"}
             ],
             orderData: [],
             total: 0,
             options: {
-              itemsPerPage: 15
+              itemsPerPage: 10
             },
             loading: false
         }
@@ -57,11 +60,10 @@ export default {
         })
         this.orderData = res.data.obj.list
         this.total = res.data.obj.total
-        console.log(this.orderData)
         this.loading = false
       },
       getColor(type){
-        return type == "WECHAT" || type == 1 ? "green" : "secondary"
+        return type == "WECHAT" || type === true ? "green" : "blue"
       }
     }
 

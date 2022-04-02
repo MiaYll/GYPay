@@ -30,7 +30,6 @@ export default {
         const res = await request().post('account/verify',this.account)
         if(res.data.obj){
             this.$store.commit('bindAccount',this.account)
-            this.$router.push('/datachart');
             this.showMessage("绑定成功")
         }else{
             this.showMessage("校验失败")

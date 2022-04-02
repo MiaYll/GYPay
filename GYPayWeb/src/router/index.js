@@ -1,9 +1,10 @@
 import Vue from "vue"
 import VueRouter from "vue-router"
 import Login from "@/pages/login/Login.vue"
-import DataChart from "@/pages/datachart/DataChart.vue"
+// import DataChart from "@/pages/datachart/DataChart.vue"
 import OrderList from "@/pages/orderlist/OrderList.vue"
 import BuyerInfo from "@/pages/buyerinfo/BuyerInfo.vue"
+import Statistics from "@/pages/statistics/Statistics.vue"
 import store from "@/store"
 
 
@@ -36,11 +37,11 @@ const routes = [
       }
     },
     {
-      path: '/datachart',
-      component: DataChart,
+      path: '/statistics',
+      component: Statistics,
       meta: {
         icon: 'mdi-chart-line',
-        title: '数据图表'
+        title: '数据统计'
       }
     },
     {

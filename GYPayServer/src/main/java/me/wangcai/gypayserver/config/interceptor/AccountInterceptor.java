@@ -1,7 +1,9 @@
 package me.wangcai.gypayserver.config.interceptor;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import me.wangcai.gypayserver.model.ResponseInfo;
+import me.wangcai.gypayserver.model.entity.Account;
 import me.wangcai.gypayserver.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,6 +33,13 @@ public class AccountInterceptor implements HandlerInterceptor {
         if(!accountService.checkKey(name,key)){
             response.getWriter().write(JSON.toJSONString(ResponseInfo.error("用户名或密码错误!")));
             return false;
+        }
+        if(request.getRequestURI().toUpperCase().startsWith("/ADMIN/")){
+            Account account = accountService.getOne(new QueryWrapper<Account>().eq("name", name));
+            if(!account.isAdmin()) {
+                response.getWriter().write(JSON.toJSONString(ResponseInfo.error("权限不足!")));
+                return false;
+            }
         }
         return true;
     }

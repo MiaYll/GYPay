@@ -9,7 +9,9 @@ const store = new Vuex.Store({
         return {
           account: {
               username: null,
-              password: null
+              password: null,
+              isAdmin: false,
+              rate: 5
           },
           navdrawer: true
         }

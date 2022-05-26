@@ -1,7 +1,7 @@
 settings:
   server: "http://server.guangyu7.cn"
-  name: "admin"
-  password: "1790175861"
+  name: ""
+  password: ""
   #倍率,自动计算指令里的points变量
   rate: 10
 commands:

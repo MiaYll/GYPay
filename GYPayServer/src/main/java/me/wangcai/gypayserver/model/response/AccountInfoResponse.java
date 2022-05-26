@@ -8,9 +8,11 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 public class AccountInfoResponse {
+    private String account;
     private LocalDateTime start;
     private LocalDateTime end;
     private double total;
     private int amount;
+    private int rate;
 
 }

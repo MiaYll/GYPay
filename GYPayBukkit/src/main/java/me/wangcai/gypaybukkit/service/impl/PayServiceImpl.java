@@ -11,25 +11,28 @@ import me.wangcai.gypaybukkit.service.IPayService;
 import me.wangcai.gypaybukkit.utils.HttpUtils;
 import me.wangcai.gypaybukkit.utils.ItemUtils;
 import me.wangcai.gypaybukkit.utils.PacketUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.MapMeta;
+import org.bukkit.map.MapPalette;
+import org.bukkit.map.MapRenderer;
+import org.bukkit.map.MapView;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class PayServiceImpl implements IPayService {
 
     private HttpUtils httpUtils = new HttpUtils();
     private Gson gson = new Gson();
-    private List<UUID> payingCache = new ArrayList<>();
+    private Map<UUID,byte[]> payingCache = new HashMap<>();
+    private boolean downgrade = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3].equals("v1_7_R4");
 
 
     @Override
@@ -57,18 +60,22 @@ public class PayServiceImpl implements IPayService {
     @Override
     public boolean openOrderQRCode(Player player, String orderId) {
         BufferedImage qrCode = httpUtils.getImage(GYPayBukkit.getGyPayBukkit().getPluginConfig().SETTINGS_SERVER + "/order/qrcode/" + orderId);
-        PacketUtils.sendMapViewPacket(player, qrCode);
+        MapView mapView = Bukkit.createMap(player.getWorld());
+        mapView.getRenderers().clear();
+        mapView.setScale(org.bukkit.map.MapView.Scale.FARTHEST);
         ItemStack item = ItemUtils.createItem(Material.MAP, "§a§l扫码地图", Arrays.asList("§7· 请扫描地图上的二维码"));
+        item.setDurability(mapView.getId());
         ItemMeta itemMeta = item.getItemMeta();
-        itemMeta.addItemFlags(ItemFlag.values());
+        if(!downgrade) itemMeta.addItemFlags(ItemFlag.values());
         item.setItemMeta(itemMeta);
-        PacketUtils.sendMapItemPacket(player,item);
-        payingCache.add(player.getUniqueId());
+        PacketUtils.sendMapItemPacket(player,item,downgrade);
+        payingCache.put(player.getUniqueId(),MapPalette.imageToBytes(qrCode));
+        player.sendMap(mapView);
         return true;
     }
 
     @Override
-    public List<UUID> getPayingCache() {
+    public Map<UUID,byte[]> getPayingCache() {
         return payingCache;
     }
 

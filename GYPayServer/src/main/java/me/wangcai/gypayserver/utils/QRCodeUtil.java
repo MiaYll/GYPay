@@ -36,8 +36,8 @@ public class QRCodeUtil {
      * @param outputStream
      * @throws Exception
      */
-    public static void encode(String content, String imgPath, boolean needCompress, ServletOutputStream outputStream) throws Exception {
-        BufferedImage image = QRCodeUtil.createImage(content, imgPath, needCompress);
+    public static void encode(String content, String imgPath, String title,boolean needCompress, ServletOutputStream outputStream) throws Exception {
+        BufferedImage image = QRCodeUtil.createImage(content, imgPath, title,needCompress);
         ImageIO.write(image, "png", outputStream);
     }
 
@@ -49,7 +49,7 @@ public class QRCodeUtil {
      * @return
      * @throws Exception
      */
-    private static BufferedImage createImage(String content, String imgPath, boolean needCompress) throws Exception {
+    private static BufferedImage createImage(String content,String imgPath, String title,boolean needCompress) throws Exception {
 
         HashMap hashMap = new HashMap(16);
         // 指定要使用的纠错程度，例如在二维码中。
@@ -75,8 +75,8 @@ public class QRCodeUtil {
         if (imgPath == null || "".equals(imgPath)) {
             return image;
         }
-//        // 插入LOGO图片
-//        QRCodeUtil.insertImage(image, imgPath, needCompress);
+        // 插入LOGO图片
+        QRCodeUtil.insertImage(image, imgPath, title,needCompress);
         return image;
     }
 
@@ -87,13 +87,13 @@ public class QRCodeUtil {
      * @param needCompress
      * @throws Exception
      */
-    private static void insertImage(BufferedImage source, String imgPath, boolean needCompress) throws Exception {
-        File file = new File(imgPath);
+    private static void insertImage(BufferedImage source, String imgPath, String title,boolean needCompress) throws Exception {
+        File file = new File("C:/" + imgPath + ".png");
         if (!file.exists()) {
             System.err.println("" + imgPath + "   该文件不存在！");
             return;
         }
-        Image src = ImageIO.read(new File(imgPath));
+        Image src = ImageIO.read(file);
         int width = src.getWidth(null);
         int height = src.getHeight(null);
 
@@ -118,8 +118,15 @@ public class QRCodeUtil {
         }
         // 插入LOGO
         Graphics2D graph = source.createGraphics();
+        graph.setColor(Color.BLACK);
         int x = (QRCODE_SIZE - width) / 2;
         int y = (QRCODE_SIZE - height) / 2;
+        Font font=new Font("宋体",Font.PLAIN,13);
+        FontMetrics fm = graph.getFontMetrics(font);
+        graph.setFont(font);
+        int textWidth = fm.stringWidth(title);
+        int widthX = (source.getWidth() - textWidth) / 2;
+        graph.drawString(title,widthX,12);
         graph.drawImage(src, x, y, width, height, null);
         Shape shape = new RoundRectangle2D.Float(x, y, width, width, 6, 6);
         graph.setStroke(new BasicStroke(3f));

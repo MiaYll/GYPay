@@ -30,7 +30,7 @@ public class PlayerListener implements Listener {
     public void onClickInv(InventoryClickEvent event) {
         HumanEntity clicked = event.getWhoClicked();
         if (clicked instanceof Player &&
-                GYPayBukkit.getGyPayBukkit().getPayService().getPayingCache().contains(clicked.getUniqueId())) {
+                GYPayBukkit.getGyPayBukkit().getPayService().getPayingCache().containsKey(clicked.getUniqueId())) {
             ((Player)clicked).updateInventory();
             event.setCancelled(true);
         }
@@ -40,7 +40,7 @@ public class PlayerListener implements Listener {
     public void onPickupItem(EntityPickupItemEvent event) {
         LivingEntity entity = event.getEntity();
         if (entity instanceof Player &&
-                GYPayBukkit.getGyPayBukkit().getPayService().getPayingCache().contains(entity.getUniqueId())) {
+                GYPayBukkit.getGyPayBukkit().getPayService().getPayingCache().containsKey(entity.getUniqueId())) {
             ((Player)entity).updateInventory();
             event.setCancelled(true);
         }
@@ -48,7 +48,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onDropItem(PlayerDropItemEvent event) {
-        if (GYPayBukkit.getGyPayBukkit().getPayService().getPayingCache().contains(event.getPlayer().getUniqueId())) {
+        if (GYPayBukkit.getGyPayBukkit().getPayService().getPayingCache().containsKey(event.getPlayer().getUniqueId())) {
             event.getPlayer().updateInventory();
             event.setCancelled(true);
         }
@@ -56,7 +56,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onToggleHand(PlayerChangedMainHandEvent event) {
-        if (GYPayBukkit.getGyPayBukkit().getPayService().getPayingCache().contains(event.getPlayer().getUniqueId()))
+        if (GYPayBukkit.getGyPayBukkit().getPayService().getPayingCache().containsKey(event.getPlayer().getUniqueId()))
             event.getPlayer().updateInventory();
     }
 }

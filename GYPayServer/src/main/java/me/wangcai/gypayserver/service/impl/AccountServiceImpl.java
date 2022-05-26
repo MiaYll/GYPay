@@ -3,6 +3,7 @@ package me.wangcai.gypayserver.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import me.wangcai.gypayserver.enums.PayType;
 import me.wangcai.gypayserver.mapper.AccountMapper;
 import me.wangcai.gypayserver.mapper.RecordMapper;
 import me.wangcai.gypayserver.model.ResponseInfo;
@@ -18,7 +19,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> implements IAccountService {
@@ -36,17 +39,29 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
     }
 
     @Override
-    public ResponseInfo getAccountInfo(AccountInfoParam accountInfoParam, String account) {
+    public AccountInfoResponse getAccountInfo(String startTime,String endTime, Account account) {
         LocalDateTime end = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        if(accountInfoParam.getEnd() != null) end = LocalDateTime.parse(accountInfoParam.getEnd(),formatter);
-        LocalDateTime start = LocalDateTime.parse(accountInfoParam.getStart(),formatter);
-        List<Order> orderList = accountMapper.getAccountInfo(start, end, account);
+        if(endTime != null) end = LocalDateTime.parse(endTime,formatter);
+        LocalDateTime start = LocalDateTime.parse(startTime,formatter);
+        List<Order> orderList = accountMapper.getAccountInfo(start, end, account.getName());
         double total = 0;
         for (Order order : orderList) {
             total += order.getPrice();
         }
-        AccountInfoResponse response = new AccountInfoResponse(start,end,total,orderList.size());
-        return ResponseInfo.success("获取成功",response);
+        AccountInfoResponse response = new AccountInfoResponse(account.getName(),start,end,total,orderList.size(),account.getRate());
+        return response;
+    }
+
+    @Override
+    public ResponseInfo getMonthInfo(String time, String account) {
+        List<Map> wechat = accountMapper.getMonthInfo(time, account, PayType.WECHAT.name());
+        List<Map> alipay = accountMapper.getMonthInfo(time, account, PayType.ALIPAY.name());
+        List<Map> total = accountMapper.getMonthInfo(time, account, null);
+        Map<String,List<Map>> map = new HashMap<>();
+        map.put("wechat",wechat);
+        map.put("alipay",alipay);
+        map.put("total",total);
+        return ResponseInfo.success("获取成功",map);
     }
 }

@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface IPayService {
@@ -19,5 +20,5 @@ public interface IPayService {
 
     boolean openOrderQRCode(Player player, String orderId);
 
-    List<UUID> getPayingCache();
+    Map<UUID,byte[]> getPayingCache();
 }

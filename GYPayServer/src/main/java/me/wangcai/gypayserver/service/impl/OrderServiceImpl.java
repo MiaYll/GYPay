@@ -85,10 +85,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
 
     @Override
     public ResponseInfo getShipOrder(String account, int page, int size) {
-        List<Map> orderList = orderMapper.getShipOrder(account, (page - 1) * size + 1, size);
+        List<Map> orderList = orderMapper.getShipOrder(account, (page - 1) * size, size);
         Map<String,Object> map = new HashMap<>();
         map.put("list",orderList);
         map.put("total",orderMapper.getShipOrderTotal(account));
         return ResponseInfo.success("获取成功",map);
     }
+
 }

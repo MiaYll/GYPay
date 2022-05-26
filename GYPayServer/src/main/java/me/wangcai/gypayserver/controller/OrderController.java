@@ -1,6 +1,5 @@
 package me.wangcai.gypayserver.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.SneakyThrows;
 import me.wangcai.gypayserver.model.ResponseInfo;
 import me.wangcai.gypayserver.model.entity.Order;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/order")
@@ -48,7 +46,8 @@ public class OrderController {
         Order order = orderService.queryOrder(orderId);
         response.setHeader("content-type","image/png");
         QRCodeUtil.encode("http://server.guangyu7.cn/pay/check/" + orderId,
-                "",
+                order.getType().name(),
+                order.getItemName(),
                 true,
                 response.getOutputStream()
                 );
@@ -69,14 +68,13 @@ public class OrderController {
     }
 
 
-
-    @PostMapping("/info")
-    public ResponseInfo getAccountInfo(@RequestBody AccountInfoParam accountInfoParam, HttpServletRequest request){
-        return accountService.getAccountInfo(accountInfoParam,request.getHeader("name"));
-    }
-
     @PostMapping("/getOrderList")
     public ResponseInfo getAccountInfo(@RequestBody PageParam pageParam, HttpServletRequest request){
         return orderService.getShipOrder(request.getHeader("name"),pageParam.getPage(),pageParam.getSize());
+    }
+
+    @PostMapping("/getMonthInfo/{time}")
+    public ResponseInfo getMonthInfo(@PathVariable String time, HttpServletRequest request){
+        return accountService.getMonthInfo(time,request.getHeader("name"));
     }
 }

@@ -3,7 +3,7 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h6">
-            数据在线查看
+            支付系统数据面板
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
@@ -34,8 +34,19 @@
 export default {
     data(){
         return {
-            routes: this.$router.options.routes.filter((route) => {return route.meta.show != false || route.meta.show == undefined})
+            routes: []
         }
+    },
+    mounted(){
+      this.updateRoute();
+    },
+    watch: {
+      isAdmin: {
+        handler() {
+          this.updateRoute();
+        },
+        deep: true,
+      },
     },
     computed: {
         navdrawer: {
@@ -45,11 +56,30 @@ export default {
           set(val){
             this.$store.state.navdrawer = val
           }
+        },
+        isAdmin() {
+          return this.$store.state.account.isAdmin;
         }
     },
     methods: {
       setPage(route){
         this.$router.push(route.path)
+      },
+      updateRoute(){
+        this.routes = this.$router.options.routes.filter((route) => {
+              if(route.meta.show == false){
+                return false
+              }
+              if(route.meta.needAdmin){
+                if(this.$store.state.account.isAdmin){
+                  return true
+                }else{
+                  return false
+                }
+                
+              }
+              return true
+            })
       }
     }
 }

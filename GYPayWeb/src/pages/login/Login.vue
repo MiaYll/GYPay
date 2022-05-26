@@ -19,7 +19,8 @@ export default {
     return {
       account: this.$store.state.account,
       text: '',
-      show: false
+      show: false,
+      rate: 5
     };
   },
   components: {
@@ -28,11 +29,11 @@ export default {
   methods: {
       async submit(){
         const res = await request().post('account/verify',this.account)
-        if(res.data.obj){
-            this.$store.commit('bindAccount',this.account)
-            this.showMessage("绑定成功")
-        }else{
-            this.showMessage("校验失败")
+        this.showMessage(res.data.message)
+        if(res.data.code == 200){
+          this.account.isAdmin = res.data.obj.admin
+          this.account.rate = res.data.obj.rate
+          this.$store.commit('bindAccount',this.account)
         }
       },
       showMessage(text) {

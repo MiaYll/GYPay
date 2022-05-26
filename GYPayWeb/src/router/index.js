@@ -3,8 +3,9 @@ import VueRouter from "vue-router"
 import Login from "@/pages/login/Login.vue"
 // import DataChart from "@/pages/datachart/DataChart.vue"
 import OrderList from "@/pages/orderlist/OrderList.vue"
-import BuyerInfo from "@/pages/buyerinfo/BuyerInfo.vue"
 import Statistics from "@/pages/statistics/Statistics.vue"
+import AccountList from "@/pages/accountlist/AccountList.vue"
+import Settings from "@/pages/settings/Settings.vue"
 import store from "@/store"
 
 
@@ -16,7 +17,7 @@ const routes = [
       component: Login,
       name: 'Login',
       meta: {
-        icon: 'mdi-account-outline',
+        icon: 'mdi-account-key-outline',
         title: '绑定密钥'
       }
     },
@@ -29,19 +30,28 @@ const routes = [
       }
     },
     {
-      path: '/buyerinfo',
-      component: BuyerInfo,
-      meta: {
-        icon: 'mdi-format-list-bulleted',
-        title: '充值信息'
-      }
-    },
-    {
       path: '/statistics',
       component: Statistics,
       meta: {
         icon: 'mdi-chart-line',
         title: '数据统计'
+      }
+    },
+    {
+      path: '/accountlist',
+      component: AccountList,
+      meta: {
+        icon: 'mdi-account-supervisor',
+        title: '用户管理',
+        needAdmin: true
+      }
+    },
+    {
+      path: '/settings',
+      component: Settings,
+      meta: {
+        icon: 'mdi-cog',
+        title: '修改设置',
       }
     },
     {

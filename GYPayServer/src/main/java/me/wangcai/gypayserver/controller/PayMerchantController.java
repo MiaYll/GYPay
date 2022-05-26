@@ -11,8 +11,9 @@ import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
 import com.egzosn.pay.ali.bean.AliTransactionType;
-import com.egzosn.pay.common.bean.NoticeParams;
-import com.egzosn.pay.common.bean.PayOrder;
+import com.egzosn.pay.ali.bean.AliTransferOrder;
+import com.egzosn.pay.ali.bean.AliTransferType;
+import com.egzosn.pay.common.bean.*;
 import com.egzosn.pay.spring.boot.core.merchant.PaymentPlatformMerchantDetails;
 import com.egzosn.pay.spring.boot.core.provider.MerchantDetailsManager;
 import me.wangcai.gypayserver.enums.PayType;
@@ -26,8 +27,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import com.egzosn.pay.common.api.PayMessageInterceptor;
-import com.egzosn.pay.common.bean.RefundOrder;
-import com.egzosn.pay.common.bean.RefundResult;
 import com.egzosn.pay.spring.boot.core.PayServiceManager;
 import com.egzosn.pay.spring.boot.core.bean.MerchantPayOrder;
 import com.egzosn.pay.spring.boot.core.bean.MerchantQueryOrder;
@@ -154,6 +153,26 @@ public class PayMerchantController {
         payOrder.setOpenid(openid);
         return manager.getOrderInfo(payOrder);
     }
+
+//    /**
+//     * 转账到支付宝
+//     */
+//    @RequestMapping(value = "/transferToAliPay")
+//    @ResponseBody
+//    public Map<String, Object> transferToAliPay() {
+//        AliTransferOrder aliTransfer = new AliTransferOrder();
+//        aliTransfer.setBizScene("DIRECT_TRANSFER");
+//        aliTransfer.setBusinessParams("{\"payer_show_name_use_alias\":\"true\"}");
+//        aliTransfer.setTransAmount(new BigDecimal(1));
+//        aliTransfer.setPayeeAccount("13385869080");
+//        aliTransfer.setIdentityType("ALIPAY_LOGON_ID");
+//        aliTransfer.setIdentity("13385869080");
+//        aliTransfer.setName("王鸿宇");
+//        aliTransfer.setTransferType(AliTransferType.TRANS_ACCOUNT_NO_PWD);
+//        aliTransfer.setOutBizNo(UUID.randomUUID().toString().replace("-",""));
+//        aliTransfer.setOrderTitle("测试发送");
+//        return manager.transfer("ALIPAYTransfer",aliTransfer);
+//    }
 
 
 }

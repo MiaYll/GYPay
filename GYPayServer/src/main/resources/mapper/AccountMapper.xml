@@ -3,6 +3,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="me.wangcai.gypayserver.mapper.AccountMapper">
     <select id="getAccountInfo" resultType="Order">
-        select * from payorder right join payrecord on payrecord.order_id = payorder.order_id where account_name=#{account} and is_Ship=1 and time >= #{start} and time &lt;= #{end};
+        select * from payorder right join payrecord on payrecord.order_id = payorder.order_id where account_name=#{account} and time >= #{start} and time &lt;= #{end};
+    </select>
+    <select id="getMonthInfo" resultType="Map">
+        SELECT DATE_FORMAT(time,'%Y-%m-%d') as day,sum(price) as money from payorder right join payrecord on payrecord.order_id = payorder.order_id where account_name=#{account} and DATE_FORMAT(create_Time,'%Y-%m') = #{time}
+        <if test="type != null">
+            and payrecord.type = #{type}
+        </if>
+        GROUP BY day
     </select>
 </mapper>

@@ -15,6 +15,6 @@ public class GYPayConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(accountInterceptor)
-                .addPathPatterns("/order/**");
+                .addPathPatterns("/order/**","/admin/**","/account/settings");
     }
 }
